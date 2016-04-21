@@ -1,4 +1,5 @@
 import java.io.*;
+import java.util.stream.*;
 import java.util.*;
 import java.nio.file.*;
 
@@ -8,6 +9,12 @@ public class Rebus_Helper {
     private static List<String> smallDict;
     private static Scanner console;
     
+    private static String pattern;
+    private static int length;
+    private static int index;
+    
+    private static Stream<String> mainStream;
+    
     public static void main(String[] args) throws IOException {
         totalDict = new LinkedList<String>();
         smallDict = new LinkedList<String>();
@@ -15,17 +22,28 @@ public class Rebus_Helper {
         Files.lines(Paths.get("dictionary.txt"))
             .forEach(totalDict::add);
         System.out.println("Done populating dict");
-        if (args.length == 2) {
-            int length = Integer.parseInt(args[0]);
-            String pattern = args[1];
+        mainStream = totalDict.stream();
+        
+        if (args.length > 0) {
+            pattern = args[0];
             
-            totalDict.stream()
-                .filter(s -> s.length() == length)
-                .filter(s -> s.contains(pattern))
-                .forEach(smallDict::add);
-            smallDict.stream()
-                .forEach(System.out::println);
+            mainStream = mainStream.filter(s -> s.contains(pattern));
+            
+            // totalDict.stream()
+            //     .filter(s -> s.contains(pattern))
+            //     .forEach(System.out::println);
         }
-        System.out.println(args.length);
+        if (args.length > 1) {           
+            length = Integer.parseInt(args[1]);
+            
+            mainStream = mainStream.filter(s -> s.length() == length);
+            
+            // totalDict.stream()
+            //     .filter(s -> s.length() == length)
+            //     .filter(s -> s.contains(pattern))
+            //     .forEach(System.out::println);
+        }
+        //System.out.println(args.length);
+        mainStream.forEach(System.out::println);
     }   
 }
