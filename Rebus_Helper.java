@@ -98,7 +98,7 @@ public class Rebus_Helper {
             });
         }
         count = 0;
-        mainStream.peek(s -> {count++;}).forEach(System.out::println);
+        mainStream.peek(s -> {count++;}).forEachOrdered(System.out::println);
         System.out.println(count + " possibilities");
     }   
 }
